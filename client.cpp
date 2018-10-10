@@ -1,5 +1,6 @@
 #include <iostream>
 #include<time.h>
+#include<unistd.h>
 #include<chrono>
 #include<stdlib.h>
 #include <boost/array.hpp>
@@ -55,7 +56,7 @@ int main(int argc, char* argv[]){
 			srand(time(NULL));
 			unsigned int seconds_ = rand() % 4;	
 			sendNewOrder( socket );
-			if( seconds_ == 0) usleep(100);
+			if( seconds_ == 0) usleep(100000);
 			else sleep(seconds_);
 		}
 		std::cout<<"Logging out\n";
