@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
-#include <order.h>
+#include "order.h"
 #include <cstdlib>
 using boost::asio::ip::tcp;
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
 		for (int i = 0; i < numOrders; ++i) { //TASK have the server respond to the client with fill messages
 			srand(time(NULL));
 			unsigned int seconds_ = rand() % 4;	
-			sendNewOrder( socket );
+			sendNewOrder( orderId, socket );
 			if( seconds_ == 0) usleep(100000);
 			else sleep(seconds_);
 		}
