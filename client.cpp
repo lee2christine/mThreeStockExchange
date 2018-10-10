@@ -11,12 +11,16 @@ using boost::asio::ip::tcp;
 
 int orderId=0;
 std::string instruments[]{"VOD.L","HSBA.L"};
-//size_t sizes[]{1763,2024};
-size_t sizes[]{1763,2024};
-double benchmarkPrices[]{1.23,2.76};
-//double benchmarkPrices[]{1.23,2.76};
+size_t sizes[2];
+double benchmarkPrices[2];
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
+	for(int i = 0; i < 2; i ++){
+		sizes[i] = rand() % 10000 + 1;
+		sleep(3);
+		benchmarkPrices[i] = ((double)rand() % 10000) / RAND_MAX + 1.0;
+		sleep(2);		
+	}
 	boost::system::error_code ignored_error;
 	int instIndex=orderId%2;
 	Order newOrder( { instruments[instIndex], Order::Buy, sizes[instIndex], benchmarkPrices[instIndex]} ); //TODO make the numbers random
@@ -26,6 +30,7 @@ void sendNewOrder(int orderId, tcp::socket& socket ) {
 }
 
 int main(int argc, char* argv[]){
+	srand(time(NULL));
 	try{
 		if (argc != 4){
 			std::cerr << "Usage: client <host> <port> <clientid>\n";
