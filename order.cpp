@@ -21,7 +21,7 @@ std::istream& operator>>( std::istream& is, Order& order ){
 	std::string symbol;
 	Order::Direction direction;
 	size_t quantity;
-	float limitPrice;
+	double limitPrice;
 
 	is >> symbol;
 	if ( is.eof() ) return is;
@@ -34,7 +34,7 @@ std::istream& operator>>( std::istream& is, Order& order ){
 }
 
 Order::Order( const std::string& symbol, Direction direction,
-		size_t quantity, float limitPrice ) :
+		size_t quantity, double limitPrice ) :
 		symbol_( symbol ),
 		direction_( direction ),
 		quantity_( quantity ),

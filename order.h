@@ -16,10 +16,10 @@ private:
     std::string symbol_;
     Direction direction_;
     size_t quantity_;
-    float limitPrice_;
+    double limitPrice_;
 public:
     Order( const std::string& symbol, Direction direction,
-        size_t quantity, float limitPrice );
+        size_t quantity, double limitPrice );
     std::string serialise() const;
     Order() = default;
     std::string toString() const;
