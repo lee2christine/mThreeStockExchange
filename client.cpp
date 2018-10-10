@@ -11,8 +11,10 @@ using boost::asio::ip::tcp;
 
 int orderId=0;
 std::string instruments[]{"VOD.L","HSBA.L"};
+//size_t sizes[]{1763,2024};
 size_t sizes[]{1763,2024};
 double benchmarkPrices[]{1.23,2.76};
+//double benchmarkPrices[]{1.23,2.76};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
 	boost::system::error_code ignored_error;
