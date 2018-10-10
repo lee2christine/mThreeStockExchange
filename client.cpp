@@ -1,11 +1,11 @@
 #include <iostream>
-#include<time.h>
-#include<unistd.h>
-#include<chrono>
-#include<stdlib.h>
+#include <time.h>
+#include <unistd.h>
+#include <chrono>
+#include <stdlib.h>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
-#include "order.h"
+#include <order.h>
 #include <cstdlib>
 using boost::asio::ip::tcp;
 
@@ -14,12 +14,11 @@ std::string instruments[]{"VOD.L","HSBA.L"};
 size_t sizes[]{1763,2024};
 double benchmarkPrices[]{1.23,2.76};
 
-void sendNewOrder( tcp::socket& socket ) {
+void sendNewOrder(int orderId, tcp::socket& socket ) {
 	boost::system::error_code ignored_error;
 	int instIndex=orderId%2;
 	Order newOrder( { instruments[instIndex], Order::Buy, sizes[instIndex], benchmarkPrices[instIndex]} ); //TODO make the numbers random
 	std::cout<<"Sending order "<<orderId++<<" "<<newOrder.toString()<<"\n";
-	//TASK change the protocol to include the order id
 	//TASK change the protocol to FIX
 	boost::asio::write(socket, boost::asio::buffer("NEW_ORDER" + newOrder.serialise()), ignored_error);
 }
