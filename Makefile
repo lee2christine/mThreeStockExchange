@@ -5,8 +5,10 @@ GTESTDIRECTORY=/home/ibutt/googletest-master/googletest
 GTESTMAIN=gtest_main.a
 CPP11=-std=c++11
 COMPILE_FOR_DEBUG=-Og -g
-LIBRARIES= \
+#LIBRARIES= \
 /usr/lib64/libboost_system-mt.so.1.53.0
+
+LIBRARIES= -lpthread /usr/lib64/libboost_system-mt.so.1.53.0
 
 CPPFLAGSWITHGTEST=$(CPP11) $(COMPILE_FOR_DEBUG) -I$(GTESTDIRECTORY)/include $(GTESTDIRECTORY)/make/$(GTESTMAIN)
 
