@@ -47,8 +47,8 @@ void handleConnection(tcp::socket socket) {
 int main(){
 	try{
 		boost::asio::io_service io_service;
-		std::cout<<"Started server listening on localhost:3000\n"; //TASK make 3000 dynamic
-		tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v4(), 3000));
+		std::cout<<"Started server listening on localhost: 0\n";
+		tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v4(), 0));
 		int clientNum=0;
 		std::vector<std::thread>connectionHandlerThreads;
 		for (;;){
