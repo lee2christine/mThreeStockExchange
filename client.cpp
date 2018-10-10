@@ -13,7 +13,7 @@ int orderId = 0;
 std::string instruments[]{"VOD.L","HSBA.L"};
 size_t sizes;
 double benchmarkPrices;
-enum Direction { Buy = 'B', Sell = 'S'};
+Order::Direction directions[] { Order::Buy, Order::Sell};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
 	sizes = rand() % 10000 + 1;
@@ -21,12 +21,12 @@ void sendNewOrder(int orderId, tcp::socket& socket ) {
 	double min = 0;
 	double max = 10000;
 	double test = (double)rand() / RAND_MAX;
-	benchmarkPrices = min + test * (max - min);
+	benchmarkPrice = min + test * (max - min);
 
 	boost::system::error_code ignored_error;
 	int instIndex = sizes % 2;
 	
-	Order newOrder( { instruments[instIndex], Order::Buy, sizes, benchmarkPrices} );
+	Order newOrder( { instruments[instIndex], directions[instIndex], sizes, benchmarkPrice} );
 	
 	std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
 	//TASK change the protocol to FIX
