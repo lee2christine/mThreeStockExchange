@@ -47,9 +47,8 @@ void handleConnection(tcp::socket socket) {
 int main(){
 	try{
 		boost::asio::io_service io_service;
-		std::cout<<"Started server listening on localhost: 0\n";
 		tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v4(), 0));
-		int portNum = acceptor.port();
+		int portNum = (acceptor.local_endpoint()).port();
 		std::cout<<"Started server listening on localhost: " << portNum << "\n"; // Testing
 		int clientNum=0;
 		std::vector<std::thread>connectionHandlerThreads;
