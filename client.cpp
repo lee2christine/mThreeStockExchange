@@ -5,26 +5,27 @@
 #include <stdlib.h>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
-#include <order.h>
+#include "order.h"
 #include <cstdlib>
 using boost::asio::ip::tcp;
 
-int orderId=0;
+int orderId = 0;
 std::string instruments[]{"VOD.L","HSBA.L"};
-size_t sizes[2];
-double benchmarkPrices[2];
+size_t sizes;
+double benchmarkPrices;
+enum Direction { Buy = 'B', Sell = 'S'};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
-	for(int i = 0; i < 2; i ++){
-		sizes[i] = rand() % 10000 + 1;
-		sleep(3);
-		benchmarkPrices[i] = ((double)rand() % 10000) / RAND_MAX + 1.0;
-		sleep(2);		
-	}
+	sizes = rand() % 10000 + 1;
+	usleep(300000);
+	benchmarkPrices = rand() % 10000 + 1;
+
 	boost::system::error_code ignored_error;
-	int instIndex=orderId%2;
-	Order newOrder( { instruments[instIndex], Order::Buy, sizes[instIndex], benchmarkPrices[instIndex]} ); //TODO make the numbers random
-	std::cout<<"Sending order "<<orderId++<<" "<<newOrder.toString()<<"\n";
+	int instIndex = sizes % 2;
+	
+	Order newOrder( { instruments[instIndex], Order::Buy, sizes, benchmarkPrices} );
+	
+	std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
 	//TASK change the protocol to FIX
 	boost::asio::write(socket, boost::asio::buffer("NEW_ORDER" + newOrder.serialise()), ignored_error);
 }
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]){
 		tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 
 		tcp::socket socket(io_service);
-		std::cout<<"Connecting to server: "<<argv[1]<<":"<<port<<"\n";
+		std::cout << "Connecting to server: " << argv[1] << ":" << port << "\n";
 		boost::asio::connect(socket, endpoint_iterator);
 
 		{
@@ -55,13 +56,13 @@ int main(int argc, char* argv[]){
 			std::cout<<"Logging in\n";
 			boost::asio::write(socket, boost::asio::buffer(message), ignored_error);
 		}
-		std::cout<<"sleep 5\n";
+		std::cout << "sleep 5\n";
 		sleep(5);
-		int numOrders=10+rand()%100;
+		int numOrders = 10 + rand() % 100;
 		for (int i = 0; i < numOrders; ++i) { //TASK have the server respond to the client with fill messages
 			srand(time(NULL));
 			unsigned int seconds_ = rand() % 4;	
-			sendNewOrder( socket );
+			sendNewOrder( orderId, socket );
 			if( seconds_ == 0) usleep(100000);
 			else sleep(seconds_);
 		}
