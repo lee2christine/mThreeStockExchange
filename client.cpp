@@ -1,4 +1,7 @@
 #include <iostream>
+#include<time.h>
+#include<chrono>
+#include<stdlib.h>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 #include "order.h"
@@ -49,8 +52,11 @@ int main(int argc, char* argv[]){
 		sleep(5);
 		int numOrders=10+rand()%100;
 		for (int i = 0; i < numOrders; ++i) { //TASK have the server respond to the client with fill messages
+			srand(time(NULL));
+			unsigned int seconds_ = rand() % 4;	
 			sendNewOrder( socket );
-			sleep(10); //TASK make random between 0.1s and 3s
+			if( seconds_ == 0) usleep(100);
+			else sleep(seconds_);
 		}
 		std::cout<<"Logging out\n";
 		{
