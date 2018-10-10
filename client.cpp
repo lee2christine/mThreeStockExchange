@@ -9,23 +9,32 @@
 #include <cstdlib>
 using boost::asio::ip::tcp;
 
-int orderId=0;
+int orderId = 0;
 std::string instruments[]{"VOD.L","HSBA.L"};
-//size_t sizes[]{1763,2024};
-size_t sizes[]{1763,2024};
-double benchmarkPrices[]{1.23,2.76};
-//double benchmarkPrices[]{1.23,2.76};
+size_t sizes;
+double benchmarkPrices;
+enum Direction { Buy = 'B', Sell = 'S'};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
+	sizes = rand() % 10000 + 1;
+	usleep(300000);
+	double min = 0;
+	double max = 10000;
+	double test = (double)rand() / RAND_MAX;
+	benchmarkPrices = min + test * (max - min);
+
 	boost::system::error_code ignored_error;
-	int instIndex=orderId%2;
-	Order newOrder( { instruments[instIndex], Order::Buy, sizes[instIndex], benchmarkPrices[instIndex]} ); //TODO make the numbers random
-	std::cout<<"Sending order "<<orderId++<<" "<<newOrder.toString()<<"\n";
+	int instIndex = sizes % 2;
+	
+	Order newOrder( { instruments[instIndex], Order::Buy, sizes, benchmarkPrices} );
+	
+	std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
 	//TASK change the protocol to FIX
 	boost::asio::write(socket, boost::asio::buffer("NEW_ORDER" + newOrder.serialise()), ignored_error);
 }
 
 int main(int argc, char* argv[]){
+	srand(time(NULL));
 	try{
 		if (argc != 4){
 			std::cerr << "Usage: client <host> <port> <clientid>\n";
@@ -41,7 +50,7 @@ int main(int argc, char* argv[]){
 		tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 
 		tcp::socket socket(io_service);
-		std::cout<<"Connecting to server: "<<argv[1]<<":"<<port<<"\n";
+		std::cout << "Connecting to server: " << argv[1] << ":" << port << "\n";
 		boost::asio::connect(socket, endpoint_iterator);
 
 		{
@@ -50,9 +59,9 @@ int main(int argc, char* argv[]){
 			std::cout<<"Logging in\n";
 			boost::asio::write(socket, boost::asio::buffer(message), ignored_error);
 		}
-		std::cout<<"sleep 5\n";
+		std::cout << "sleep 5\n";
 		sleep(5);
-		int numOrders=10+rand()%100;
+		int numOrders = 10 + rand() % 100;
 		for (int i = 0; i < numOrders; ++i) { //TASK have the server respond to the client with fill messages
 			srand(time(NULL));
 			unsigned int seconds_ = rand() % 4;	
