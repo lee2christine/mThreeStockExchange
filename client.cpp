@@ -8,7 +8,7 @@ using boost::asio::ip::tcp;
 int orderId=0;
 std::string instruments[]{"VOD.L","HSBA.L"};
 size_t sizes[]{1763,2024};
-float benchmarkPrices[]{1.23,2.76}; //TODO change all floats to doubles
+double benchmarkPrices[]{1.23,2.76};
 
 void sendNewOrder( tcp::socket& socket ) {
 	boost::system::error_code ignored_error;
