@@ -7,6 +7,7 @@
 #include <boost/asio.hpp>
 #include "order.h"
 #include <cstdlib>
+#include <string>
 using boost::asio::ip::tcp;
 
 int orderId = 0;
@@ -28,8 +29,15 @@ void sendNewOrder(int orderId, tcp::socket& socket ) {
 	
 	Order newOrder( { instruments[instIndex], Order::Buy, sizes, benchmarkPrices} );
 	
-	std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
+	//std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
+	
 	//TASK change the protocol to FIX
+
+	std::string FIX = "37=" + std::to_string(++orderId) + " | 55=" + instruments[instIndex] + 
+		" | 53=" + std::to_string(sizes) + " | 44=" + std::to_string(benchmarkPrices) + " | 54=1\n";  	
+
+	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
+
 	boost::asio::write(socket, boost::asio::buffer("NEW_ORDER" + newOrder.serialise()), ignored_error);
 }
 
