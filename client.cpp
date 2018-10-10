@@ -18,7 +18,10 @@ enum Direction { Buy = 'B', Sell = 'S'};
 void sendNewOrder(int orderId, tcp::socket& socket ) {
 	sizes = rand() % 10000 + 1;
 	usleep(300000);
-	benchmarkPrices = rand() % 10000 + 1;
+	double min = 0;
+	double max = 10000;
+	double test = (double)rand() / RAND_MAX;
+	benchmarkPrices = min + test * (max - min);
 
 	boost::system::error_code ignored_error;
 	int instIndex = sizes % 2;
