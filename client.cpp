@@ -13,7 +13,7 @@ using boost::asio::ip::tcp;
 int orderId = 0;
 std::string instruments[]{"VOD.L","HSBA.L"};
 size_t sizes;
-double benchmarkPrices;
+double benchmarkPrice;
 Order::Direction directions[] { Order::Buy, Order::Sell};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
@@ -29,12 +29,12 @@ void sendNewOrder(int orderId, tcp::socket& socket ) {
 	
 	Order newOrder( { instruments[instIndex], directions[instIndex], sizes, benchmarkPrice} );
 	
-	//std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
-	
-	//TASK change the protocol to FIX
-
-	std::string FIX = "37=" + std::to_string(++orderId) + " | 55=" + instruments[instIndex] + 
-		" | 53=" + std::to_string(sizes) + " | 44=" + std::to_string(benchmarkPrices) + " | 54=1\n";  	
+	std::string FIX = "37=" + std::to_string(++orderId) 
+				+ " | 55=" + instruments[instIndex]
+				+ " | 53=" + std::to_string(sizes) 
+				+ " | 44=" + std::to_string(benchmarkPrice) 
+				+ " | 54=" + std::to_string(directions[instIndex])
+				+ '\n';  	
 
 	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
 
