@@ -56,3 +56,20 @@ std::string Order::toString() const {
 		<< "' }";
 	return oss.str();
 }
+
+
+void Order::FIX(int instIndex) {
+	int orderId = 0;
+	std::string FIX = "37=" + std::to_string(++orderId)
+				+ " | 44=" + std::to_string(limitPrice_) 
+				+ " | 53=" + std::to_string(quantity_) 
+				+ " | 54=" + static_cast<char>(direction_)
+				+ " | 55=" + symbol_
+				+ '\n';  	
+
+	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
+}
+
+
+
+

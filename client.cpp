@@ -29,6 +29,9 @@ void sendNewOrder(int& orderId, tcp::socket& socket ) {
 
 	Order newOrder( { instruments[instIndex], directions[instIndex], quantity, benchmarkPrice} );
 
+	newOrder.FIX(instIndex);
+
+	/*
 	std::string FIX = "37=" + std::to_string(++orderId) 
 				+ " | 55=" + instruments[instIndex]
 				+ " | 53=" + std::to_string(quantity) 
@@ -37,7 +40,8 @@ void sendNewOrder(int& orderId, tcp::socket& socket ) {
 				+ '\n';  	
 
 	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
-
+	*/
+	
 	boost::asio::write(socket, boost::asio::buffer("NEW_ORDER" + newOrder.serialise()), ignored_error);
 }
 
