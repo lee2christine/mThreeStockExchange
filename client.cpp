@@ -27,9 +27,11 @@ void sendNewOrder(int& orderId, tcp::socket& socket ) {
 	boost::system::error_code ignored_error;
 	int instIndex = quantity % 2;
 
-	Order newOrder( { instruments[instIndex], directions[instIndex], quantity, benchmarkPrice} );
+	//Order newOrder(orderId, instruments[instIndex], directions[instIndex], quantity, benchmarkPrice );
 
-	newOrder.FIX(instIndex);
+	Order newOrder(instruments[instIndex], directions[instIndex], quantity, benchmarkPrice );
+	++orderId;
+	newOrder.FIX(orderId);
 
 	/*
 	std::string FIX = "37=" + std::to_string(++orderId) 

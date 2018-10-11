@@ -17,14 +17,16 @@ private:
     Direction direction_;
     size_t quantity_;
     double limitPrice_;
+    //int orderId_;
 public:
     char getDirection() const { if ( direction_ == '1') return true; else return false; }
-    Order( const std::string& symbol, Direction direction,
-    size_t quantity, double limitPrice );
+    Order( const std::string& symbol, Direction direction, size_t quantity, double limitPrice );
+    //Order( int orderID, const std::string& symbol, Direction direction,
+    //size_t quantity, double limitPrice );
     std::string serialise() const;
     Order() = default;
     std::string toString() const;
-    void FIX(int instIndex);
+    void FIX(int orderId);
 
 };
 

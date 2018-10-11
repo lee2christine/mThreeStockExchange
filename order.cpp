@@ -18,11 +18,13 @@ std::istream& operator>>( std::istream& is, Order::Direction& direction ){
 	return is;
 }
 std::istream& operator>>( std::istream& is, Order& order ){
+	//int orderId;
 	std::string symbol;
 	Order::Direction direction;
 	size_t quantity;
 	double limitPrice;
 
+	//is >> orderId;
 	is >> symbol;
 	if ( is.eof() ) return is;
 	is >> direction;
@@ -30,16 +32,28 @@ std::istream& operator>>( std::istream& is, Order& order ){
 	is >> limitPrice;
 
 	order = Order(symbol, direction, quantity, limitPrice);
+
+	//order = Order(orderId, symbol, direction, quantity, limitPrice);
 	return is;
 }
 
-Order::Order( const std::string& symbol, Direction direction,
+Order::Order(const std::string& symbol, Direction direction,
 		size_t quantity, double limitPrice ) :
 		symbol_( symbol ),
 		direction_( direction ),
 		quantity_( quantity ),
 		limitPrice_( limitPrice ){
 }
+
+/*Order::Order(int orderId, const std::string& symbol, Direction direction,
+                size_t quantity, double limitPrice ) :
+                orderId_(orderId),
+                symbol_( symbol ),
+                direction_( direction ),
+                quantity_( quantity ),
+                limitPrice_( limitPrice ){
+}
+*/
 
 std::string Order::serialise() const {
 	std::ostringstream oss;
@@ -58,9 +72,12 @@ std::string Order::toString() const {
 }
 
 
-void Order::FIX(int instIndex) {
-	int orderId = 0;
-	std::string FIX = "37=" + std::to_string(++orderId)
+void Order::FIX(int orderId) {
+
+
+	std::string FIX = "37=" + std::to_string(orderId)
+	//std::string FIX = "37=" + std::to_string(++orderId_)
+	
 				+ " | 44=" + std::to_string(limitPrice_) 
 				+ " | 53=" + std::to_string(quantity_) 
 				+ " | 54=" + static_cast<char>(direction_)
