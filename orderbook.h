@@ -8,8 +8,8 @@
 #include <mutex>
 #include "order.h"
 
-class Matches {
-};
+typedef std::pair<std::string, Order> ClientOrderPair;
+typedef std::vector<std::pair<ClientOrderPair, ClientOrderPair>> Matches;
 
 class OrderBook {
 private:
@@ -21,7 +21,7 @@ public:
     /**
      * Look for matches, execute the matches, and return the fills
      */
-    Matches findAndExecuteMatches();
+    const Matches& findAndExecuteMatches();
 };
 
 std::istream& operator>>( std::istream&, Order& );

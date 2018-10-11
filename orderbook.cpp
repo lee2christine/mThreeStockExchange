@@ -3,20 +3,20 @@
 #include <unordered_map>
 
 void OrderBook::addOrder(const std::string& client, const Order& order){
-        std::pair<std::string, Order> clientOrderPair(client, order);
+        ClientOrderPair newPair(client, order);
 	std::string symbol = order.symbol();
 
 	if(order.getDirection() == '1'){
 		auto it = buyOrders_.find(symbol);
   		if(it != buyOrders_.end()){
-			(it->second).push_back(clientOrderPair);
+			(it->second).push_back(newPair);
 
 			/*insOrder = insTest->second;
 			insOrder.push_back(order);
 			insTest->second = insOrder;*/
 		}
 		else{
-        		std::vector< std::pair<std::string, Order> > orders = {clientOrderPair};
+        		std::vector< ClientOrderPair > orders = {newPair};
         		//orders.push_back(order);
 			buyOrders_[symbol] = orders;
 		}  
@@ -25,13 +25,13 @@ void OrderBook::addOrder(const std::string& client, const Order& order){
         else if (order.getDirection() == '2'){
 		auto it = sellOrders_.find(symbol);
                 if(it != sellOrders_.end()){
-			(it->second).push_back(clientOrderPair);
+			(it->second).push_back(newPair);
                         /*insOrder = insTest->second;
                         insOrder.push_back(order);
                         insTest->second = insOrder;*/
                 }
                 else{
-        		std::vector< std::pair<std::string, Order> > orders = {clientOrderPair};
+        		std::vector< ClientOrderPair > orders = {newPair};
 			sellOrders_[symbol] = orders;
         		//orders.push_back(order);
         		//std::vector<Order> orders = {order};
@@ -40,11 +40,21 @@ void OrderBook::addOrder(const std::string& client, const Order& order){
 
 	}
 }
-/*
-const std::vector<std::pair<Order,Order>>& OrderBook::findAndExecuteMatches(){	
-	std::vector<std::pair<Order, Order>> Matches;
+
+const Matches& OrderBook::findAndExecuteMatches(){	
+	Matches matches;
 	auto it = buyOrders_.begin();
 	while (it != buyOrders_.end()){
-		
+		std::string key = it->first;
+		if (buyOrders_.find(key) != buyOrders_.end()){
+			for(unsigned int i = 0; i != sellOrders_[key].size(); ++i){
+				if (buyOrders_[key][i].second.price() == sellOrders_[key][j].second.price()){
+					ClientOrderPair buyPair(buyOrders_[key][i].first, buyOrders_[key][i].second);
+					ClientOrderPair sellPair(sellOrders_[key][j].first, sellOrders_[key][j].second);
+					std::pair<ClientOrderPair, ClientOrderPair> match(buyPair, sellPair);
+					matches.push_back(match);
+				}
+			}
+		}
 	}
-}*/
+}
