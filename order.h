@@ -18,7 +18,7 @@ private:
     size_t quantity_;
     double limitPrice_;
 public:
-    char getDirection() const { if ( direction_ == '1') return true; else return false; }
+    char getDirection() const { if ( direction_ == '1') return '1'; else return '2'; }
     Order( const std::string& symbol, Direction direction,
     size_t quantity, double limitPrice );
     std::string serialise() const;
