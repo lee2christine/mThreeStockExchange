@@ -24,6 +24,8 @@ public:
     std::string serialise() const;
     Order() = default;
     std::string toString() const;
+    void FIX(int instIndex);
+
 };
 
 std::istream& operator>>( std::istream&, Order& );
