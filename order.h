@@ -19,16 +19,13 @@ private:
     double limitPrice_;
     //int orderId_;
 public:
-<<<<<<< HEAD
-    char getDirection() const { if ( direction_ == '1') return true; else return false; }
+
     Order( const std::string& symbol, Direction direction, size_t quantity, double limitPrice );
     //Order( int orderID, const std::string& symbol, Direction direction,
     //size_t quantity, double limitPrice );
-=======
+
     char getDirection() const { if ( direction_ == '1') return '1'; else return '2'; }
-    Order( const std::string& symbol, Direction direction,
-    size_t quantity, double limitPrice );
->>>>>>> 968ab1c74384946accbcaefa30dee2ebf9e8e92b
+
     std::string serialise() const;
     Order() = default;
     std::string toString() const;
