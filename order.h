@@ -30,9 +30,15 @@ public:
     Order() = default;
     std::string toString() const;
     void FIX(int orderId);
+    const std::string& symbol() const;
 
 };
 
 std::istream& operator>>( std::istream&, Order& );
+
+inline
+const std::string& Order::symbol() const {
+	return symbol_;
+}	
 
 #endif // Order_h_
