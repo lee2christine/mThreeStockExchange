@@ -11,7 +11,7 @@
 class Order {
     friend std::istream& operator>>( std::istream&, Order& );
 public:
-    enum Direction { Buy = 'B', Sell = 'S' };
+    enum Direction { Buy = '1', Sell = '2' };
 private:
     std::string symbol_;
     Direction direction_;
@@ -19,7 +19,7 @@ private:
     double limitPrice_;
 public:
     Order( const std::string& symbol, Direction direction,
-        size_t quantity, double limitPrice );
+    size_t quantity, double limitPrice );
     std::string serialise() const;
     Order() = default;
     std::string toString() const;

@@ -12,29 +12,29 @@ using boost::asio::ip::tcp;
 
 int orderId = 0;
 std::string instruments[]{"VOD.L","HSBA.L"};
-size_t sizes;
-double benchmarkPrices;
-enum Direction { Buy = 'B', Sell = 'S'};
+size_t quantity;
+double benchmarkPrice;
+Order::Direction directions[] { Order::Buy, Order::Sell};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
-	sizes = rand() % 10000 + 1;
+	quantity = rand() % 10000 + 1;
 	usleep(300000);
 	double min = 0;
 	double max = 10000;
 	double test = (double)rand() / RAND_MAX;
-	benchmarkPrices = min + test * (max - min);
+	benchmarkPrice = min + test * (max - min);
 
 	boost::system::error_code ignored_error;
-	int instIndex = sizes % 2;
+	int instIndex = quantity % 2;
 	
-	Order newOrder( { instruments[instIndex], Order::Buy, sizes, benchmarkPrices} );
+	Order newOrder( { instruments[instIndex], directions[instIndex], quantity, benchmarkPrice} );
 	
-	//std::cout << "Sending order " << ++orderId << " " << newOrder.toString() << "\n";
-	
-	//TASK change the protocol to FIX
-
-	std::string FIX = "37=" + std::to_string(++orderId) + " | 55=" + instruments[instIndex] + 
-		" | 53=" + std::to_string(sizes) + " | 44=" + std::to_string(benchmarkPrices) + " | 54=1\n";  	
+	std::string FIX = "37=" + std::to_string(++orderId) 
+				+ " | 55=" + instruments[instIndex]
+				+ " | 53=" + std::to_string(quantity) 
+				+ " | 44=" + std::to_string(benchmarkPrice) 
+				+ " | 54=" + (char)directions[instIndex]
+				+ '\n';  	
 
 	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
 
