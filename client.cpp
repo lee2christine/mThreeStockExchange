@@ -16,7 +16,7 @@ size_t quantity;
 double benchmarkPrice;
 Order::Direction directions[] { Order::Buy, Order::Sell};
 
-void sendNewOrder(int orderId, tcp::socket& socket ) {
+void sendNewOrder(int& orderId, tcp::socket& socket ) {
 	quantity = rand() % 10000 + 1;
 	usleep(300000);
 	double min = 0;
@@ -26,14 +26,14 @@ void sendNewOrder(int orderId, tcp::socket& socket ) {
 
 	boost::system::error_code ignored_error;
 	int instIndex = quantity % 2;
-	
+
 	Order newOrder( { instruments[instIndex], directions[instIndex], quantity, benchmarkPrice} );
-	
+
 	std::string FIX = "37=" + std::to_string(++orderId) 
 				+ " | 55=" + instruments[instIndex]
 				+ " | 53=" + std::to_string(quantity) 
 				+ " | 44=" + std::to_string(benchmarkPrice) 
-				+ " | 54=" + (char)directions[instIndex]
+				+ " | 54=" + static_cast<char>(directions[instIndex])
 				+ '\n';  	
 
 	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
