@@ -1,6 +1,7 @@
 #ifndef OrderBook_h_
 #define OrderBook_h_
-
+#include <map>
+#include <vector>
 #include <thread>
 #include <deque>
 #include <string>
@@ -14,10 +15,10 @@ class Matches {
 
 class OrderBook {
 private:
-    WhatTypeShouldThisBe buyOrders_;
-    WhatTypeShouldThisBe sellOrders_;
+    std::map<std::string, std::vector<Order>> buyOrders_;
+    std::map<std::string, std::vector<Order>> sellOrders_;
 public:
-    void addOrder(const std::string& client, const Order& order);
+    char addOrder(const std::string& client, const Order& order);
 
     /**
      * Look for matches, execute the matches, and return the fills
