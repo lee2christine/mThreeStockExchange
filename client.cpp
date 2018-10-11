@@ -12,12 +12,12 @@ using boost::asio::ip::tcp;
 
 int orderId = 0;
 std::string instruments[]{"VOD.L","HSBA.L"};
-size_t sizes;
+size_t quantity;
 double benchmarkPrice;
 Order::Direction directions[] { Order::Buy, Order::Sell};
 
 void sendNewOrder(int orderId, tcp::socket& socket ) {
-	sizes = rand() % 10000 + 1;
+	quantity = rand() % 10000 + 1;
 	usleep(300000);
 	double min = 0;
 	double max = 10000;
@@ -25,15 +25,15 @@ void sendNewOrder(int orderId, tcp::socket& socket ) {
 	benchmarkPrice = min + test * (max - min);
 
 	boost::system::error_code ignored_error;
-	int instIndex = sizes % 2;
+	int instIndex = quantity % 2;
 	
-	Order newOrder( { instruments[instIndex], directions[instIndex], sizes, benchmarkPrice} );
+	Order newOrder( { instruments[instIndex], directions[instIndex], quantity, benchmarkPrice} );
 	
 	std::string FIX = "37=" + std::to_string(++orderId) 
 				+ " | 55=" + instruments[instIndex]
-				+ " | 53=" + std::to_string(sizes) 
+				+ " | 53=" + std::to_string(quantity) 
 				+ " | 44=" + std::to_string(benchmarkPrice) 
-				+ " | 54=" + std::to_string(directions[instIndex])
+				+ " | 54=" + (char)directions[instIndex]
 				+ '\n';  	
 
 	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;

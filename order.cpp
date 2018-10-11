@@ -7,12 +7,12 @@ std::istream& operator>>( std::istream& is, Order::Direction& direction ){
 	std::string d;
 
 	is >> d;
-	if ( d == "B" ) {
+	if ( d == "1" ) {
 		direction = Order::Direction::Buy;
-	} else if ( d == "S" ) {
+	} else if ( d == "2" ) {
 		direction = Order::Direction::Sell;
 	} else {
-		throw std::runtime_error("Can't read a direction: it must be B or S");
+		throw std::runtime_error("Can't read a direction: it must be 1 or 2");
 	}
 
 	return is;
