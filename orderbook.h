@@ -21,18 +21,10 @@ public:
     void addOrder(const std::string& client, const Order& order);
     void print(std::ostream& out) const;
     std::vector<ClientOrderPair> buy() const;
-    /**
-     * Look for matches, execute the matches, and return the fills
-     */
     Matches findAndExecuteMatches();
 };
 
 std::istream& operator>>( std::istream&, Order& );
-/*
-inline
-std::vector<ClientOrderPair> OrderBook::buy() const{
-     return buyOrders_->second;
-}*/
 
 inline 
 void OrderBook::print(std::ostream& out) const {
@@ -40,18 +32,18 @@ void OrderBook::print(std::ostream& out) const {
     if (buyOrders_.size() != 0){
 	auto it = buyOrders_.begin();
     	while (it != buyOrders_.end()){
-	    out << it->first;
-            for(unsigned int i = 0; i != it->second.size(); ++i){
-		out << " " << (it->second)[i].first
-			<< " " << (it->second)[i].second.direction()
-			<<  " " << (it->second)[i].second.quantity()
-			<<  " " << (it->second)[i].second.price();
-            }
-            ++it;
-            if (it != buyOrders_.end()){
-                out << ", ";
-            }
-	}	
+			out << it->first;
+			for(unsigned int i = 0; i != it->second.size(); ++i){
+				out << " " << (it->second)[i].first
+					<< " " << (it->second)[i].second.direction()
+					<< " " << (it->second)[i].second.quantity()
+					<< " " << (it->second)[i].second.price();
+			}
+			++it;
+			if (it != buyOrders_.end()){
+				out << ", ";
+			}
+		}	
     }
 
     out << " -- Sell Orders: ";
@@ -61,9 +53,9 @@ void OrderBook::print(std::ostream& out) const {
             out << it->first;
             for(unsigned int i = 0; i != it->second.size(); ++i){
                 out << " " << (it->second)[i].first
-                        << " " << (it->second)[i].second.direction()
-                        <<  " " << (it->second)[i].second.quantity()
-                        <<  " " << (it->second)[i].second.price();
+					<< " " << (it->second)[i].second.direction()
+					<<  " " << (it->second)[i].second.quantity()
+					<<  " " << (it->second)[i].second.price();
             }
             ++it;
             if (it != sellOrders_.end()){

@@ -9,34 +9,22 @@ void OrderBook::addOrder(const std::string& client, const Order& order){
 		auto it = buyOrders_.find(symbol);
   		if(it != buyOrders_.end()){
 			(it->second).push_back(newPair);
-
-			/*insOrder = insTest->second;
-			insOrder.push_back(order);
-			insTest->second = insOrder;*/
 		}
 		else{
-        		std::vector< ClientOrderPair > orders = {newPair};
-        		//orders.push_back(order);
+        	std::vector< ClientOrderPair > orders = {newPair};
 			buyOrders_[symbol] = orders;
 		}  
-        }
+	}
 
-        else if (order.getDirection() == '2'){
+	else if (order.getDirection() == '2'){
 		auto it = sellOrders_.find(symbol);
-                if(it != sellOrders_.end()){
+		if(it != sellOrders_.end()){
 			(it->second).push_back(newPair);
-                        /*insOrder = insTest->second;
-                        insOrder.push_back(order);
-                        insTest->second = insOrder;*/
-                }
-                else{
-        		std::vector< ClientOrderPair > orders = {newPair};
-			sellOrders_[symbol] = orders;
-        		//orders.push_back(order);
-        		//std::vector<Order> orders = {order};
-			//sellOrders_.emplace(client, orders);
 		}
-
+		else{
+			std::vector< ClientOrderPair > orders = {newPair};
+			sellOrders_[symbol] = orders;
+		}
 	}
 }
 
