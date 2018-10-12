@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include "order.h"
+#include <boost/algorithm/string/replace.hpp>
 
 void ConnectionHandler::queueMessage( const char* buffer, size_t len ) {
 	std::cout << "queueMessage called";
@@ -10,6 +11,42 @@ void ConnectionHandler::queueMessage( const char* buffer, size_t len ) {
 	queue_.push_back( message );
 	std::cout << "leaving queueMessage\n";
 }
+
+/*
+void parse(std::string fullMessage) {
+	std::string message = fullMessage.substr(9);
+	std::string delimiter = " | ";
+	size_t pos = message.find(delimiter);
+	
+	token = message.substr(0, pos);
+	std::string symbol = token;
+	
+	message.erase(0, pos + delimiter.length());
+
+	token = message.substr(0, pos);
+        std::string direction = token;
+ 
+	message.erase(0, pos + delimiter.length());
+
+	token = message.substr(0, pos);
+        std::string quantity = token;
+
+	message.erase(0, pos + delimiter.length());
+
+        token = message.substr(0, pos);
+        std::string limitPrice = token;
+
+}
+
+
+
+std::string unFIXer(std::string fullMessage) {
+	std::string message = fullMessage.substr(9);
+	std::replace( message.begin(), message.end(), " | ", " ");
+	return message;
+}
+
+*/
 
 void ConnectionHandler::processMessages() {
 	size_t howMany = 0;
@@ -32,9 +69,18 @@ void ConnectionHandler::processMessages() {
 					std::cout << "HELLO_I_AM was received '" <<userIdentifiedAs_ << "'\n";
 					queue_.pop_front();
 				} else if ( "NEW_ORDER" == message.substr(0, 9) ) {
-					std::string remainder = message.substr(9);
-					std::cout << "NEW_ORDER was received '" <<remainder << "'\n";
+					std::string cut = message.substr(9);
+					//std::replace( remainder.begin(), remainder.end(), " | ", " ");
+					std::string remainder = boost::replace_all_copy(cut, " | ", " ");
+					remainder = boost::replace_all_copy(remainder, "55=", "");
+					remainder = boost::replace_all_copy(remainder, "54=", "");
+					remainder = boost::replace_all_copy(remainder, "53=", "");
+					remainder = boost::replace_all_copy(remainder, "44=", "");
+					
+	
+					std::cout << "NEW_ORDER was received '" << cut << "'\n";
 					//std::stringstream ss( remainder, std::ios::binary );
+				
 					std::stringstream ss( remainder );
 					Order order;
 					ss >> order;
@@ -42,20 +88,22 @@ void ConnectionHandler::processMessages() {
 					std::cout << "tellg says size of message " << tellg << "\n";
 					queue_.pop_front();
 					//ss.ignore( ss.tellg() );
+					
 					if (tellg == -1) {
 						std::ios::iostate ios = ss.rdstate();
 						if ( ss.eof() ) {
 							std::cout << "we reached end of file\n";
-							/*std::string newmessage;
-							if(queue_.empty()){
-								newmessage = message;
-							}else{
-								newmessage = message + queue_.front();
-								queue_.pop_front();
-							}
-							queue_.push_front( newmessage );*/
+							//std::string newmessage;
+							//if(queue_.empty()){
+							//	newmessage = message;
+							//}else{
+							//	newmessage = message + queue_.front();
+							//	queue_.pop_front();
+							//}
+							//queue_.push_front( newmessage );
 						}
 					} else {
+					 
 						howMany++;
 						std::cout << "The order was " << order.toString() << "\n";
 						remainder = remainder.substr( ss.tellg() );

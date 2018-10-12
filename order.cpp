@@ -57,7 +57,13 @@ Order::Order(const std::string& symbol, Direction direction,
 
 std::string Order::serialise() const {
 	std::ostringstream oss;
-	oss << symbol_ << " " << static_cast<char>(direction_) << " " << quantity_ << " " << limitPrice_;
+//	oss << symbol_ << " " << static_cast<char>(direction_) << " " << quantity_ << " " << limitPrice_;
+
+oss << "55=" << symbol_
+                << " | 54=" << static_cast<char>(direction_)
+                << " | 53=" << quantity_
+                << " | 44=" << limitPrice_;
+ 
 	return oss.str();
 }
 
@@ -68,25 +74,28 @@ std::string Order::toString() const {
 		<< "' quantity '" << quantity_
 		<< "' limit price '" << limitPrice_
 		<< "' }";
+	
+	/*
+	oss << " | 55=" << symbol_
+		<< " | 54=" << static_cast<char>(direction_)
+		<< " | 53=" << quantity_
+		<< " | 44=" << limitPrice_;
+	
+	*/
 	return oss.str();
 }
 
 
 void Order::FIX(int orderId) {
-
-
 	std::string FIX = "37=" + std::to_string(orderId)
-	//std::string FIX = "37=" + std::to_string(++orderId_)
-	
-				+ " | 44=" + std::to_string(limitPrice_) 
-				+ " | 53=" + std::to_string(quantity_) 
-				+ " | 54=" + static_cast<char>(direction_)
 				+ " | 55=" + symbol_
+				+ " | 54=" + static_cast<char>(direction_)
+				+ " | 53=" + std::to_string(quantity_) 
+				+ " | 44=" + std::to_string(limitPrice_) 
 				+ '\n';  	
 
 	std::cout << "8=FIX.4.2 | 9=" << FIX.length() << " | " << FIX;
 }
-
 
 
 
