@@ -1,4 +1,4 @@
-ALL: server client
+ALL: server client orderbook
 TESTS: orderbook.t
 
 GTESTDIRECTORY=/home/ibutt/googletest-master/googletest
