@@ -31,8 +31,44 @@ public:
     std::string toString() const;
     void FIX(int orderId);
 
+    const std::string& symbol() const;
+    double price() const;
+    size_t quantity() const;
+    char direction() const;
+
+    bool operator==(const Order& rhs) const;
 };
 
 std::istream& operator>>( std::istream&, Order& );
+
+inline
+const std::string& Order::symbol() const {
+	return symbol_;
+}	
+
+inline 
+double Order::price() const {
+	return limitPrice_;
+}
+
+inline
+size_t Order::quantity() const {
+        return quantity_;
+}
+
+inline
+char Order::direction() const {
+        return getDirection();
+}
+
+
+inline 
+bool Order::operator==(const Order& rhs) const {
+	return ((symbol_ == rhs.symbol_) 
+		&& (direction_ == rhs.direction_)
+		&& (quantity_ == rhs.quantity_)
+		&& (limitPrice_ == rhs.limitPrice_)
+		);
+}
 
 #endif // Order_h_

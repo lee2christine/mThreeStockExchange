@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <exception>
 
 std::istream& operator>>( std::istream& is, Order::Direction& direction ){
 	std::string d;
